@@ -1,0 +1,26 @@
+# Compiler files
+cache/
+out/
+
+# Ignores development broadcast logs
+!/broadcast
+/broadcast/*/31337/
+/broadcast/**/dry-run/
+
+# Docs
+docs/
+
+# Dotenv file
+.env
+
+# Contract files
+src/constructors.sol
+src/errorHandling.sol
+src/forLoopClass.sol
+src/ifOrElse.sol
+src/immutableAndConstant.sol
+src/imports.sol
+src/modifiers.sol
+
+# Test files
+test/testIfOrElse.t.sol
