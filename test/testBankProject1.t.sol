@@ -7,7 +7,6 @@ import {console} from "../lib/forge-std/src/console.sol";
 import {bankProject1} from "../src/bankProject1.sol";
 
 contract testBankProject1 is Test {
-
     // test creatAcount function
     address bankOwner = makeAddr("opeyemi");
 
@@ -21,18 +20,18 @@ contract testBankProject1 is Test {
         vm.deal(bankOwner, 5 ether);
         vm.prank(bankOwner);
         ourDeployedContract.createAccount{value: 1 ether}("opeyemi");
-         
-        (string memory name, uint256 balance, address accountAddress, bool status) = ourDeployedContract.differentAccounts(bankOwner);
+
+        (string memory name, uint256 balance, address accountAddress, bool status) =
+            ourDeployedContract.differentAccounts(bankOwner);
         assertEq(name, "opeyemi");
         assertEq(balance, 0);
-        assertEq(accountAddress, bankOwner); 
+        assertEq(accountAddress, bankOwner);
         assertTrue(status);
 
         console.log("this is the name of the account holder:", name);
-        console.log("this is the balance of the account:", balance); 
+        console.log("this is the balance of the account:", balance);
         console.log("this is the address of the account holder:", bankOwner);
     }
-
 
     function testUserDeposit() public {
         vm.deal(bankOwner, 5 ether);
@@ -42,7 +41,6 @@ contract testBankProject1 is Test {
 
         console.log("bankOwner money is now:", bankOwner.balance);
     }
-
 
     function testUserWithdraw() public {
         vm.deal(bankOwner, 5 ether);
@@ -79,12 +77,12 @@ contract testBankProject1 is Test {
         vm.prank(bankOwner);
         ourDeployedContract.closeAccount();
 
-        (string memory name, uint256 balance, address addr, bool status) = ourDeployedContract.differentAccounts(bankOwner);
+        (string memory name, uint256 balance, address addr, bool status) =
+            ourDeployedContract.differentAccounts(bankOwner);
 
         assertEq(name, "");
         assertEq(balance, 0);
         assertEq(addr, address(0));
         assertFalse(status);
-    }  
-
+    }
 }

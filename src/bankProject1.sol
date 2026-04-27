@@ -2,7 +2,6 @@
 pragma solidity ^0.8.30;
 
 contract bankProject1 {
-
     address public immutable bankOwner;
     uint256 public constant FEE = 1e16; // 0.01 ether
     uint256 public totalFee;
@@ -18,9 +17,8 @@ contract bankProject1 {
         // bytes bvn;
     }
 
-
     // mapping key address to the value accounts
-    mapping (address => accounts) public differentAccounts;
+    mapping(address => accounts) public differentAccounts;
 
     // CONSTRUCTOR - set the owner of the bank
     constructor(address _owner) {
@@ -38,17 +36,13 @@ contract bankProject1 {
         // Check
         if (msg.value < FEE) {
             revert FEEIsLow(msg.value);
-        } 
+        }
         totalFee += msg.value;
 
-        differentAccounts[msg.sender] = accounts({
-            name: _name,
-            accountBalance: 0,
-            accountAddress: msg.sender,
-            accountStatus: true
-        });
+        differentAccounts[msg.sender] =
+            accounts({name: _name, accountBalance: 0, accountAddress: msg.sender, accountStatus: true});
     }
-    
+
     // 2. user deposit money into different bank acccounts
     function userDeposit() public payable {
         require(msg.value > 0, "you must send more than zero amount");
@@ -63,16 +57,15 @@ contract bankProject1 {
         //CEI = CHECK- EFFECT - INTERACTION
         // CHECK
         require(amount > 0, "amount must be greater than zero");
-        require(differentAccounts[msg.sender].accountBalance >= amount,"insufficient balance");
+        require(differentAccounts[msg.sender].accountBalance >= amount, "insufficient balance");
 
         // EFFECT
         differentAccounts[msg.sender].accountBalance -= amount;
         totalAmountInBank -= amount;
-        
-        //INTERACTION
-        (bool isWithdrawn, ) = payable(msg.sender).call{value:amount}("");
-        require(isWithdrawn, "it cancelled joor");
 
+        //INTERACTION
+        (bool isWithdrawn,) = payable(msg.sender).call{value: amount}("");
+        require(isWithdrawn, "it cancelled joor");
     }
 
     // 4. Owner A can transfer to Owner B -> only updates internal transfer system, it does not move real ETH
@@ -81,7 +74,7 @@ contract bankProject1 {
         // Owner B = recipient
 
         // Effect
-        differentAccounts[msg.sender].accountBalance -=  amount;
+        differentAccounts[msg.sender].accountBalance -= amount;
         differentAccounts[recipient].accountBalance += amount;
     }
 
@@ -90,11 +83,10 @@ contract bankProject1 {
         // get the amount of the user that wants to close an account
         uint256 _amount = differentAccounts[msg.sender].accountBalance;
 
-        // withdraw all the money from the contract for the user that want to close an account 
+        // withdraw all the money from the contract for the user that want to close an account
         userWIthdraw(_amount);
 
         // delete the account from the mapping
         delete differentAccounts[msg.sender];
     }
-
 }
